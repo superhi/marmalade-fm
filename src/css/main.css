@@ -1,7 +1,8 @@
 body {
-  font-family: -apple-system, sans-serif;
+  font-family: 'Open Sans', -apple-system, sans-serif;
   font-size: 1rem;
   line-height: 1.5;
+  color: #5c5c5c;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

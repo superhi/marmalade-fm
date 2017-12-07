@@ -5,9 +5,11 @@ import {BrowserRouter as Router, Route} from 'react-router-dom';
 import FeaturedMix from './FeaturedMix';
 import Header from './Header';
 import Home from './Home';
+import Archive from './Archive';
+import About from './About';
 
-const Archive = () => <h1>Archive</h1>;
-const About = () => <h1>About</h1>;
+// we import our mix data
+import mixesData from '../data/mixes';
 
 class App extends Component {
   constructor(props) {
@@ -17,26 +19,36 @@ class App extends Component {
       playing: false,
       // the id of the current mix
       currentMix: '',
-      mix: null
+      // this will be equal to our data file of mixes
+      mixIds: mixesData,
+      mix: null,
+      mixes: []
     };
   }
 
   fetchMixes = async () => {
-    console.log('fetchMixes');
-    try {
-      // always remember await when using fetch in an async function
-      const response = await fetch(
-        'https://api.mixcloud.com/yazcine/bal-dambiances-ruh-special-guests-collab-by-skyecatcher-and-neon-jesus/'
-      );
-      const data = await response.json();
-      // put the mix into our state
-      this.setState({
-        mix: data
-      });
-      console.log(data);
-    } catch (error) {
-      console.log(error);
-    }
+    const {mixIds} = this.state;
+
+    // here we loop over our mix ids and fetch each other
+    mixIds.map(async id => {
+      try {
+        // always remember await when using fetch in an async function
+        const response = await fetch(
+          // we add the id onto the end of our url as a dynamic segment
+          `https://api.mixcloud.com${id}`
+        );
+        const data = await response.json();
+
+        // put the mix into our state
+        this.setState((prevState, props) => ({
+          // here we add our data onto the end of all of
+          // our previous state using the spread
+          mixes: [...prevState.mixes, data]
+        }));
+      } catch (error) {
+        console.log(error);
+      }
+    });
   };
 
   mountAudio = async () => {
@@ -59,8 +71,6 @@ class App extends Component {
         playing: true
       })
     );
-
-    console.log(this.widget);
   };
 
   componentDidMount() {
@@ -100,6 +110,10 @@ class App extends Component {
   };
 
   render() {
+    // this makes a variable from our first mix in the array
+    // if the array is empty, we assign it a default value of an
+    // empty {} object
+    const [firstMix = {}] = this.state.mixes;
     return (
       // router wraps our whole page and lets us use react-router
       <Router>
@@ -107,16 +121,16 @@ class App extends Component {
           {/* this div contians our page (excluding audio player) */}
           <div className="flex-l justify-end">
             {/* FeaturedMix (needs styling and updating) */}
-            <FeaturedMix />
+            <FeaturedMix {...this.state} {...this.actions} {...firstMix} id={firstMix.key} />
             <div className="w-50-l relative z-1">
               {/* Header (needs styling and updating)  */}
               <Header />
               {/* Routed page */}
               {/* here we pass our state and our actions down into the
               home component so that we can use them */}
-              <Route exact path="/" component={() => <Home {...this.state} {...this.actions} />} />
-              <Route path="/archive" component={Archive} />
-              <Route path="/about" component={About} />
+              <Route exact path="/" render={() => <Home {...this.state} {...this.actions} />} />
+              <Route path="/archive" render={() => <Archive {...this.state} {...this.actions} />} />
+              <Route path="/about" render={() => <About {...this.state} />} />
             </div>
           </div>
           {/* AudioPlayer */}
