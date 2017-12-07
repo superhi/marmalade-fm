@@ -16,9 +16,28 @@ class App extends Component {
       // whether a mix is currently playing
       playing: false,
       // the id of the current mix
-      currentMix: ''
+      currentMix: '',
+      mix: null
     };
   }
+
+  fetchMixes = async () => {
+    console.log('fetchMixes');
+    try {
+      // always remember await when using fetch in an async function
+      const response = await fetch(
+        'https://api.mixcloud.com/yazcine/bal-dambiances-ruh-special-guests-collab-by-skyecatcher-and-neon-jesus/'
+      );
+      const data = await response.json();
+      // put the mix into our state
+      this.setState({
+        mix: data
+      });
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   mountAudio = async () => {
     // when we use the this keyword, our widget is now accessible
@@ -50,6 +69,7 @@ class App extends Component {
     // everything is ready, so we then run our mountAudio()
     // method
     this.mountAudio();
+    this.fetchMixes();
   }
 
   actions = {
