@@ -1,4 +1,6 @@
 import React from 'react';
+import {connect} from 'react-redux';
+import actions from '../store/actions';
 
 // this component wraps around anything that when we click
 // will start playing a mix for us. it provides us functioanlity
@@ -9,10 +11,10 @@ const PlayMix = ({playMix, id, currentMix, playing, children}) => (
   // of 'playing'
   <div
     className={`pointer ${id === currentMix && playing && 'playing'}`}
-    onClick={() => playMix(id)}
+    onClick={() => playMix({currentMix: id, fromMixcloud: false})}
   >
     {children}
   </div>
 );
 
-export default PlayMix;
+export default connect(state => state, actions)(PlayMix);
