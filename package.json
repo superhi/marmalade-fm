@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "classnames": "^2.2.5",
     "date-fns": "^1.29.0",
     "react": "^16.2.0",
     "react-countup": "^3.0.2",

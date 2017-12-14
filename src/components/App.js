@@ -43,7 +43,7 @@ class App extends Component {
     // this makes a variable from our first mix in the array
     // if the array is empty, we assign it a default value of an
     // empty {} object
-    const [firstMix = {}] = this.props.mixes;
+    // const [firstMix = {}] = this.props.mixes;
     return (
       // router wraps our whole page and lets us use react-router
       <Router>
@@ -51,7 +51,7 @@ class App extends Component {
           {/* this div contians our page (excluding audio player) */}
           <div className="flex-l justify-end">
             {/* FeaturedMix (needs styling and updating) */}
-            <FeaturedMix {...this.state} {...this.actions} {...firstMix} id={firstMix.key} />
+            <FeaturedMix />
             <div className="w-50-l relative z-1">
               {/* Header (needs styling and updating)  */}
               <Header />
